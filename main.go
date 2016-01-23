@@ -1,30 +1,22 @@
 package main
 
 import (
-	"log"
+	logging "log"
+	"os"
 	"os/exec"
 )
 
 func main() {
 	var err error
 	var stdout []byte
-	var ps *exec.Cmd
-
-	ps = exec.Command("ps")
-	err = ps.Start()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = ps.Wait()
-	if err != nil {
-		log.Fatal(err)
-	}
+	var ps *exec.Cmd = exec.Command("ps", "aux")
+	var log *logging.Logger = logging.New(os.Stderr, "",
+		logging.LstdFlags|logging.Lshortfile)
 
 	stdout, err = ps.Output()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	log.Println(stdout)
+	log.Println(string(stdout))
 }
